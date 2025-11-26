@@ -1,0 +1,1 @@
+# sotsologik_test
