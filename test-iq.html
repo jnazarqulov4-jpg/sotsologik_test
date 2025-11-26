@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="title">IQ Test</title>
+<style>
+body { margin:0; font-family: Arial, sans-serif; background:#eef3fb; padding:20px; }
+header { display:flex; align-items:center; padding:14px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+header img { width:46px; height:46px; border-radius:50%; object-fit:cover; }
+header h2 { margin-left:12px; }
+.lang-box { margin-left:auto; }
+.lang-box button { margin-left:6px; padding:6px 10px; cursor:pointer; border-radius:6px; border:1px solid #ccc; background:#f2f2f2; }
+.lang-box button.active { background:#1a73e8; color:#fff; border-color:transparent; }
+.container { max-width:900px; margin:30px auto; padding:0 16px; }
+.question { background:#fff; padding:18px; margin-bottom:12px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+label.option { display:block; padding:10px; border-radius:8px; margin-top:8px; border:1px solid #ddd; cursor:pointer; transition:0.2s; }
+label.option:hover { background:#e0eaff; }
+button.submit { background:#1a73e8; color:#fff; padding:12px 16px; border:none; border-radius:8px; cursor:pointer; font-size:16px; width:100%; margin-top:12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="rasm/iq_logo.png" alt="logo">
+  <h2 data-i18n="header_title">IQ Test</h2>
+
+  <div class="lang-box">
+      <button type="button" data-lang="uz">UZ</button>
+      <button type="button" data-lang="ru">RU</button>
+      <button type="button" data-lang="en">EN</button>
+  </div>
+</header>
+
+<div class="container" id="quiz"></div>
+
+<script>
+const dict = {
+  uz: {
+    title: "IQ Test",
+    header_title: "IQ Test",
+    submit_btn: "Boshlash va Yuborish",
+    must_select: i => `${i}-savolni belgilang!`,
+    q: [
+      "1, 3, 5, 7, ? - qaysi son ketadi?",
+      "Ranglar orasida qizil, ko‘k, yashil... Keyingi rang nima?",
+      "Agar BARCHA Alar B bo‘lsa va BARCHA Blar C bo‘lsa, Alar Cmi?",
+      "Qanday so‘z sinonimdir: tezkor, shoshilinch, ...?",
+      "6, 11, 21, 36, ? - qaysi son ketadi?",
+      "Qaysi shakl boshqalardan farq qiladi?",
+      "1 soat = necha daqiqa?",
+      "Agar biror narsani bo‘lsa 2 ga bo‘lsak, natija 5 bo‘lsa, boshlang‘ich son nechchi?",
+      "Qaysi raqam to‘g‘ri ketma-ketlikda?",
+      "3 ta olma va 2 ta apelsin narxi 11 so‘m. 1 olma va 1 apelsin nechchi so‘m?"
+    ],
+    opt: [
+      ["9","10","8","7"],
+      ["Sariq","Qora","Oq","Moviy"],
+      ["Ha","Yo‘q","Ba’zan","Aniq emas"],
+      ["Tezkor","Sekin","Kechikkan","Asta"],
+      ["56","55","50","60"],
+      ["Kvadrat","Doira","Uchburchak","To‘rtburchak"],
+      ["60","30","90","120"],
+      ["10","12","8","5"],
+      ["1,2,3","2,4,6","3,6,9","1,3,5"],
+      ["5","6","4","7"]
+    ]
+  },
+  ru: {
+    title: "IQ Тест",
+    header_title: "IQ Тест",
+    submit_btn: "Начать и отправить",
+    must_select: i => `Выберите ответ для ${i}-вопроса!`,
+    q: [
+      "1, 3, 5, 7, ? - какое число идет дальше?",
+      "Цвета: красный, синий, зеленый... Следующий цвет?",
+      "Если ВСЕ A это B и ВСЕ B это C, то A это C?",
+      "Какое слово синоним: быстрый, спешащий, ...?",
+      "6, 11, 21, 36, ? - какое число идет дальше?",
+      "Какая фигура отличается от остальных?",
+      "1 час = ? минут",
+      "Если разделить число на 2, результат 5, исходное число?",
+      "Какой ряд чисел правильный?",
+      "3 яблока и 2 апельсина стоят 11 сом. 1 яблоко и 1 апельсин?"
+    ],
+    opt: [
+      ["9","10","8","7"],
+      ["Желтый","Черный","Белый","Синий"],
+      ["Да","Нет","Иногда","Неопределенно"],
+      ["Быстрый","Медленный","Опоздавший","Медленно"],
+      ["56","55","50","60"],
+      ["Квадрат","Круг","Треугольник","Прямоугольник"],
+      ["60","30","90","120"],
+      ["10","12","8","5"],
+      ["1,2,3","2,4,6","3,6,9","1,3,5"],
+      ["5","6","4","7"]
+    ]
+  },
+  en: {
+    title: "IQ Test",
+    header_title: "IQ Test",
+    submit_btn: "Start and Submit",
+    must_select: i => `Select an answer for question ${i}!`,
+    q: [
+      "1, 3, 5, 7, ? - which number comes next?",
+      "Colors: red, blue, green... Next color?",
+      "If ALL A are B and ALL B are C, are A C?",
+      "Which word is a synonym: quick, hasty, ...?",
+      "6, 11, 21, 36, ? - which number comes next?",
+      "Which shape differs from others?",
+      "1 hour = ? minutes",
+      "If a number divided by 2 equals 5, what was the original number?",
+      "Which sequence of numbers is correct?",
+      "3 apples and 2 oranges cost 11 som. 1 apple and 1 orange?"
+    ],
+    opt: [
+      ["9","10","8","7"],
+      ["Yellow","Black","White","Blue"],
+      ["Yes","No","Sometimes","Not sure"],
+      ["Quick","Slow","Late","Gradual"],
+      ["56","55","50","60"],
+      ["Square","Circle","Triangle","Rectangle"],
+      ["60","30","90","120"],
+      ["10","12","8","5"],
+      ["1,2,3","2,4,6","3,6,9","1,3,5"],
+      ["5","6","4","7"]
+    ]
+  }
+};
+
+window.setLang = function(selectedLang){
+  try { localStorage.setItem('lang', selectedLang); } catch(e) {}
+  render();
+};
+
+let lang = localStorage.getItem('lang') || 'uz';
+
+function render(){
+  lang = localStorage.getItem('lang') || lang || 'uz';
+  const D = dict[lang] || dict.uz;
+
+  const titleEl = document.querySelector('title[data-i18n]');
+  if(titleEl) titleEl.innerText = D.title;
+  document.title = D.title;
+  const hdr = document.querySelector('[data-i18n="header_title"]');
+  if(hdr) hdr.innerText = D.header_title;
+
+  document.querySelectorAll('.lang-box button').forEach(btn=>{
+    if(btn.dataset.lang === lang) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+
+  const quiz = document.getElementById('quiz');
+  quiz.innerHTML = '';
+
+  D.q.forEach((qText, idx) => {
+    const box = document.createElement('div');
+    box.className = 'question';
+    box.innerHTML = `<h4>${idx+1}. ${qText}</h4>`;
+
+    (D.opt[idx] || []).forEach(opt => {
+      const lbl = document.createElement('label');
+      lbl.className = 'option';
+      const safeVal = String(opt).replace(/"/g, '&quot;');
+      lbl.innerHTML = `<input type="radio" name="q${idx}" value="${safeVal}"> ${opt}`;
+      box.appendChild(lbl);
+    });
+
+    quiz.appendChild(box);
+  });
+
+  const btn = document.createElement('button');
+  btn.className = 'submit';
+  btn.type = 'button';
+  btn.innerText = D.submit_btn;
+  btn.onclick = submitForm;
+  quiz.appendChild(btn);
+}
+
+document.addEventListener('DOMContentLoaded', ()=> {
+  document.querySelectorAll('.lang-box button').forEach(b=>{
+    const l = b.getAttribute('data-lang');
+    b.dataset.lang = l;
+    b.addEventListener('click', ()=> {
+      window.setLang(l);
+    });
+  });
+  render();
+});
+
+function submitForm(){
+  const D = dict[lang];
+  let currentUserStr = localStorage.getItem('current_user');
+  if(!currentUserStr){
+    alert(D && D.must_select ? (D.alerts?.login || 'Iltimos tizimga kiring') : 'Iltimos tizimga kiring');
+    location.href='kirish.html';
+    return;
+  }
+  let currentUser;
+  try{ currentUser = JSON.parse(currentUserStr); }catch(e){
+    alert(D && D.alerts ? (D.alerts.invalid || 'Tizimdagi ma’lumotlar noto‘g‘ri!') : 'Tizimdagi ma’lumotlar noto‘g‘ri!');
+    location.href='kirish.html';
+    return;
+  }
+
+  const answers = [];
+  const total = (dict[lang].q || dict.uz.q).length;
+  for(let i=0;i<total;i++){
+    const sel = document.querySelector(`input[name='q${i}']:checked`);
+    if(!sel){
+      alert((i+1) + (dict[lang].must_select ? dict[lang].must_select(i+1).replace(`${i+1}-`, '-') : '-savolni belgilang!'));
+      return;
+    }
+    answers.push(sel.value);
+  }
+
+  const results = JSON.parse(localStorage.getItem('results') || '[]');
+  results.push({
+    login: currentUser.login,
+    ism: currentUser.ism,
+    fam: currentUser.fam,
+    vil: currentUser.vil || '',
+    test: 'IQ',
+    answers: answers,
+    ts: new Date().toISOString()
+  });
+  localStorage.setItem('results', JSON.stringify(results));
+
+  alert(dict[lang].alerts?.saved || 'Test muvaffaqiyatli saqlandi!');
+  location.href = 'test.html';
+}
+</script>
+
+</body>
+</html>

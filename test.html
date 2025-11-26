@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mudofaa Test Tizimi</title>
+
+<style>
+:root{
+  --bg:#eef3fb;
+  --accent:#1a73e8;
+  --footer-bg:#0c1928;
+}
+body{
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  margin:0;
+  font-family:'Inter',Arial,sans-serif;
+  background:var(--bg);
+}
+
+/* Header */
+header{
+  display:flex;
+  align-items:center;
+  padding:12px 24px;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+header img{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+}
+header h1{
+  margin:0 0 0 12px;
+  font-size:18px;
+  font-weight:700;
+}
+
+/* Language Buttons */
+.lang-box{
+  margin-left:auto;
+  display:flex;
+  gap:10px;
+}
+.lang-box button{
+  padding:6px 10px;
+  border:none;
+  background:#e5e9f0;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+}
+.lang-active{
+  background:var(--accent) !important;
+  color:#fff;
+}
+
+/* Cards */
+.container{
+  flex:1;
+  max-width:1100px;
+  margin:30px auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  padding:0 16px;
+}
+
+.card{
+  background:#fff;
+  height:380px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  text-align:center;
+  position:relative;
+}
+
+.card .round{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  overflow:hidden;
+  margin-top:20px;
+}
+.card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.card h3{
+  font-size:16px;
+  margin-top:20px;
+  margin-bottom:0;
+}
+
+.card p{
+  font-size:13px;
+  color:#555;
+  margin-top:20px;
+  margin-bottom:0;
+  padding:0 10px;
+}
+
+.card button{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  position:absolute;
+  bottom:40px;
+}
+
+/* Motivatsion matn */
+#motiv{
+  text-align:center;
+  font-family:'Times New Roman', Times, serif;
+  font-size:35px;
+  font-weight:700;
+  color:#000;
+  margin:120px auto 150px;
+  min-height:50px;
+  text-shadow:2px 2px 5px rgba(0,0,0,0.3);
+  transition:opacity 1s ease-in-out;
+}
+
+/* Footer */
+footer{
+  background:var(--footer-bg);
+  color:#fff;
+  padding:15px 40px;
+  border-radius:12px 12px 0 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  min-height:120px;
+}
+footer .left, footer .right{
+  flex:1;
+  min-width:200px;
+}
+footer .right{
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-left: 1300px;
+}
+footer a{
+  color:inherit;
+  text-decoration:none;
+  font-weight:600;
+}
+footer .bottom{
+  width:100%;
+  text-align:center;
+  margin-top:8px;
+  font-size:12px;
+  color:#ccc;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="rasm/mho_logoo.jfif" alt="logo">
+  <h1 data-uz="Mudofaa Test Tizimi" data-eng="Defense Test System" data-ru="Оборонная Тестовая Система">Mudofaa Test Tizimi</h1>
+
+  <div class="lang-box">
+    <button data-lang="uz" class="lang-active">UZ</button>
+    <button data-lang="eng">EN</button>
+    <button data-lang="ru">RU</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="card" data-test="sotsiologiya">
+    <div class="round"><img src="rasm/AdobeStock_1556054810_Preview.jpeg"></div>
+    <h3 data-uz="Sotsiologik Test" data-eng="Sociological Test" data-ru="Социологический Тест">Sotsiologik Test</h3>
+    <p data-uz="Jamoaviy muhit va shaxsiy munosabatlarni baholash." data-eng="Assess team environment and relationships." data-ru="Оценка командной среды и отношений.">Jamoaviy muhit va shaxsiy munosabatlarni baholash.</p>
+    <button data-uz="Boshlash" data-eng="Start" data-ru="Начать">Boshlash</button>
+  </div>
+
+  <div class="card" data-test="ruhiy">
+    <div class="round"><img src="rasm/AdobeStock_1769397308_Preview.jpeg"></div>
+    <h3 data-uz="Axloqiy - Ruhiy" data-eng="Moral - Psychological" data-ru="Морально-Психологический">Axloqiy - Ruhiy</h3>
+    <p data-uz="Shaxs ruhiy holati va axloqiy qarorlarni aniqlash." data-eng="Evaluate mental state and moral decisions." data-ru="Оценка психического состояния и моральных решений.">Shaxs ruhiy holati va axloqiy qarorlarni aniqlash.</p>
+    <button data-uz="Boshlash" data-eng="Start" data-ru="Начать">Boshlash</button>
+  </div>
+
+  <div class="card" data-test="harbiy">
+    <div class="round"><img src="rasm/AdobeStock_1172175240_Preview.jpeg"></div>
+    <h3 data-uz="Harbiy Bilimlar" data-eng="Military Knowledge" data-ru="Военные Знания">Harbiy Bilimlar</h3>
+    <p data-uz="Harbiy bilim va strategik qaror qabul qilish ko‘nikmalarini tekshirish." data-eng="Test military knowledge and strategy." data-ru="Проверка военных знаний и стратегии.">Harbiy bilim va strategik qaror qabul qilish ko‘nikmalarini tekshirish.</p>
+    <button data-uz="Boshlash" data-eng="Start" data-ru="Начать">Boshlash</button>
+  </div>
+
+  <div class="card" data-test="iq">
+    <div class="round"><img src="rasm/AdobeStock_1548687751_Preview.jpeg"></div>
+    <h3 data-uz="IQ - Mantiq" data-eng="IQ - Logic" data-ru="IQ - Логика">IQ - Mantiq</h3>
+    <p data-uz="Mantiqiy fikrlash va IQ darajasini baholash." data-eng="Assess logic and IQ level." data-ru="Оценка логики и уровня IQ.">Mantiqiy fikrlash va IQ darajasini baholash.</p>
+    <button data-uz="Boshlash" data-eng="Start" data-ru="Начать">Boshlash</button>
+  </div>
+
+</div>
+
+<div id="motiv"></div>
+
+<script>
+// Motivation phrases in 3 languages
+const motiv = {
+  uz:["Hech qachon taslim bo‘lma!","Harakat qilgan kishi g‘olib bo‘ladi.","Xatoliklardan o‘rganing.","Bugun boshlang!"],
+  eng:["Never give up!","Those who act will win.","Learn from mistakes.","Start today!"],
+  ru:["Никогда не сдавайся!","Тот, кто действует, побеждает.","Учитесь на ошибках.","Начните сегодня!"]
+};
+let mi=0; let lang='uz';
+const md=document.getElementById('motiv');
+function showMot(){ 
+  md.style.opacity=0; 
+  setTimeout(()=>{
+    md.innerText=motiv[lang][mi]; 
+    md.style.opacity=1; 
+    mi=(mi+1)%motiv[lang].length; 
+  },500); 
+}
+showMot(); 
+setInterval(showMot,8000);
+
+// Language switch
+document.querySelectorAll('.lang-box button').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.lang-box button').forEach(b=>b.classList.remove('lang-active'));
+    btn.classList.add('lang-active');
+    lang=btn.dataset.lang;
+
+    document.querySelectorAll('[data-uz]').forEach(el=>{
+      el.innerText = el.dataset[lang];
+    });
+  };
+});
+
+// Start buttons — FULLY WORKING
+document.querySelectorAll('.card button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    let page = btn.parentElement.dataset.test;
+    window.location.href = "test-" + page + ".html";
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// F12 va boshqa DevTools larni bloklash
+document.onkeydown = function(e){
+  if(e.key === "F12"){
+    return false;
+  }
+  if(e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")){
+    return false;
+  }
+  if(e.ctrlKey && e.key === "U"){
+    return false;
+  }
+};
+
+// O'ng tugmani bloklash
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// DevTools ochilganini aniqlash (yanada kuchaytirilgan himoya)
+setInterval(() => {
+  const start = performance.now();
+  debugger;
+  const end = performance.now();
+  if(end - start > 100){
+    alert("Developer Tools taqiqlangan!");
+    location.reload();
+  }
+}, 500);
+
+</script>
+
+<footer>
+  <div class="left">
+    <h3 style="color:#1a73e8; margin:0 0 4px;" 
+    data-uz="Mudofaa Vazirligi" 
+    data-eng="Ministry of Defense" 
+    data-ru="Министерство Обороны">Mudofaa Vazirligi</h3>
+
+    <p style="margin:0; font-size:14px;" 
+    data-uz="Markaziy Harbiy Okrug" 
+    data-eng="Central Military District" 
+    data-ru="Центральный Военный Округ">Markaziy Harbiy Okrug</p>
+  </div>
+
+ <div class="right">
+  <a href="https://t.me/YourBotUsername" target="_blank">📨 Telegram</a>
+  <span>📞 +998 94 916 82 52</span>
+</div>
+
+
+  <div class="bottom">© 2025 Mudofaa Test Tizimi. Barcha huquqlar himoyalangan.</div>
+</footer>
+
+</body>
+</html>

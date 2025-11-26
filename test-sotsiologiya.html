@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="title">Sotsiologik Test</title>
+<style>
+body { margin:0; font-family: Arial, sans-serif; background:#eef3fb; padding:20px; }
+header { display:flex; align-items:center; padding:14px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+header img { width:46px; height:46px; border-radius:50%; object-fit:cover; }
+header h2 { margin-left:12px; }
+.lang-box { margin-left:auto; }
+.lang-box button { margin-left:6px; padding:6px 10px; cursor:pointer; border-radius:6px; border:1px solid #ccc; background:#f2f2f2; }
+.lang-box button.active { background:#1a73e8; color:#fff; border-color:transparent; }
+.container { max-width:900px; margin:30px auto; padding:0 16px; }
+.question { background:#fff; padding:18px; margin-bottom:12px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+label.option { display:block; padding:10px; border-radius:8px; margin-top:8px; border:1px solid #ddd; cursor:pointer; transition:0.2s; }
+label.option:hover { background:#e0eaff; }
+button.submit { background:#1a73e8; color:#fff; padding:12px 16px; border:none; border-radius:8px; cursor:pointer; font-size:16px; width:100%; margin-top:12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="rasm/AdobeStock_1556054810_Preview.jpeg" alt="logo">
+  <h2 data-i18n="header_title">Sotsiologik Test</h2>
+
+  <!-- NOTE: no inline onclick here — use data-lang attributes -->
+  <div class="lang-box">
+      <button type="button" data-lang="uz">UZ</button>
+      <button type="button" data-lang="ru">RU</button>
+      <button type="button" data-lang="en">EN</button>
+  </div>
+</header>
+
+<div class="container" id="quiz"></div>
+
+<script>
+/* ===== i18n dictionary (unchanged questions/content except translations) ===== */
+const dict = {
+  uz: {
+    title: "Sotsiologik Test",
+    header_title: "Sotsiologik Test",
+    submit_btn: "Boshlash va Yuborish",
+    must_select: i => `${i}-savolni belgilang!`,
+    q: [
+      "Jinsingiz?",
+      "Yoshingiz?",
+      "Oilaviy muhit barqarormi?",
+      "Farzandlar soni?",
+      "Yashash joyingiz?",
+      "Oilaviy munosabatlar qanday?",
+      "Turmush o‘rtog‘ingiz ish jadvali oilaga ta’sir qiladimi?",
+      "Farzandlar tarbiyasida turmush o‘rtog‘ingiz faolmi?",
+      "Oilaviy nizolar qanchalik tez-tez yuz beradi?",
+      "Harbiy xizmatdagi stress oilaga ta’sir qiladimi?",
+      "Moddiy ahvolingizni baholang",
+      "Harbiy oilalar uchun qanday qo‘llab-quvvatlash kerak?",
+      "Oilada qaror qanday qabul qilinadi?",
+      "Eng muhim moddiy muammolar?"
+    ],
+    opt: [
+      ["Ayol","Erkak"],
+      ["18-25","26-35","36-45","46 dan yuqori"],
+      ["Ha","Yo‘q","Ba’zan","Farqi yo‘q"],
+      ["Yo‘q","1 ta","2 ta","3 va undan ko‘p"],
+      ["Harbiy shaharcha","Shaxsiy uy","Ijara"],
+      ["Juda yaxshi","Yaxshi","O‘rtacha","Qiyin"],
+      ["Juda ko‘p","Biroz","Ta’sir qilmaydi"],
+      ["Ha","Yo‘q","Ba’zan"],
+      ["Juda tez","Kamdan-kam","Hech qachon"],
+      ["Ha","Qisman","Yo‘q"],
+      ["Yaxshi","O‘rtacha","Qoniqarsiz"],
+      ["Uy-joy","Ruhiy yordam","Farzandlar uchun bog‘cha/maktab","Ayollar bandligi"],
+      ["Birgalikda","Er tomonidan","Xotin tomonidan","Qarindoshlar"],
+      ["Uy-joy","Ish o‘rni","Ta’lim","Tibbiyot","Transport","Boshqa"]
+    ]
+  },
+  ru: {
+    title: "Социологический тест",
+    header_title: "Социологический тест",
+    submit_btn: "Начать и отправить",
+    must_select: i => `Выберите ответ для ${i}-вопроса!`,
+    q: [
+      "Ваш пол?",
+      "Ваш возраст?",
+      "Стабильна ли семейная обстановка?",
+      "Количество детей?",
+      "Где вы живёте?",
+      "Какие отношения в семье?",
+      "График работы супруга влияет на семью?",
+      "Участвует ли супруг в воспитании детей?",
+      "Как часто происходят конфликты?",
+      "Стресс службы влияет на семью?",
+      "Оцените материальное положение",
+      "Какая поддержка нужна военным семьям?",
+      "Как принимаются решения в семье?",
+      "Главные материальные проблемы?"
+    ],
+    opt: [
+      ["Женщина","Мужчина"],
+      ["18-25","26-35","36-45","Старше 46"],
+      ["Да","Нет","Иногда","Без разницы"],
+      ["Нет","1","2","3 и более"],
+      ["Военный городок","Свой дом","Аренда"],
+      ["Отличные","Хорошие","Средние","Трудные"],
+      ["Сильно","Немного","Не влияет"],
+      ["Да","Нет","Иногда"],
+      ["Очень часто","Редко","Никогда"],
+      ["Да","Частично","Нет"],
+      ["Хорошее","Среднее","Плохое"],
+      ["Жильё","Психологическая помощь","Детские сады/школы","Занятость женщин"],
+      ["Совместно","Муж","Жена","Родственники"],
+      ["Жильё","Работа","Образование","Медицина","Транспорт","Другое"]
+    ]
+  },
+  en: {
+    title: "Sociological Test",
+    header_title: "Sociological Test",
+    submit_btn: "Start and Submit",
+    must_select: i => `Select an answer for question ${i}!`,
+    q: [
+      "Your gender?",
+      "Your age?",
+      "Is your family environment stable?",
+      "Number of children?",
+      "Your place of residence?",
+      "Family relationship quality?",
+      "Does spouse’s work schedule affect family?",
+      "Does spouse participate in child raising?",
+      "How often do conflicts happen?",
+      "Does military service stress affect family?",
+      "Rate your financial situation",
+      "What support is needed for military families?",
+      "How are decisions made in family?",
+      "Main financial problems?"
+    ],
+    opt: [
+      ["Female","Male"],
+      ["18-25","26-35","36-45","46+"],
+      ["Yes","No","Sometimes","Doesn't matter"],
+      ["None","1","2","3+"],
+      ["Military town","Own house","Rent"],
+      ["Excellent","Good","Average","Hard"],
+      ["A lot","A little","No effect"],
+      ["Yes","No","Sometimes"],
+      ["Very often","Rarely","Never"],
+      ["Yes","Partly","No"],
+      ["Good","Average","Poor"],
+      ["Housing","Psychological help","School/Kindergarten","Women's employment"],
+      ["Together","By husband","By wife","Relatives"],
+      ["Housing","Job","Education","Medicine","Transport","Other"]
+    ]
+  }
+};
+
+/* ===== ensure setLang is global before any handlers might reference it ===== */
+window.setLang = function(selectedLang){
+  try { localStorage.setItem('lang', selectedLang); } catch(e) {}
+  // Re-render (no full reload needed)
+  render();
+};
+
+/* ===== initial language and render function ===== */
+let lang = localStorage.getItem('lang') || 'uz';
+
+function render(){
+  lang = localStorage.getItem('lang') || lang || 'uz';
+  const D = dict[lang] || dict.uz;
+
+  // update title/header
+  const titleEl = document.querySelector('title[data-i18n]');
+  if(titleEl) titleEl.innerText = D.title;
+  document.title = D.title;
+  const hdr = document.querySelector('[data-i18n="header_title"]');
+  if(hdr) hdr.innerText = D.header_title;
+
+  // highlight active lang button
+  document.querySelectorAll('.lang-box button').forEach(btn=>{
+    if(btn.dataset.lang === lang) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+
+  // build quiz
+  const quiz = document.getElementById('quiz');
+  quiz.innerHTML = '';
+
+  D.q.forEach((qText, idx) => {
+    const box = document.createElement('div');
+    box.className = 'question';
+    box.innerHTML = `<h4>${idx+1}. ${qText}</h4>`;
+
+    (D.opt[idx] || []).forEach(opt => {
+      const lbl = document.createElement('label');
+      lbl.className = 'option';
+      // escape double quotes in value
+      const safeVal = String(opt).replace(/"/g, '&quot;');
+      lbl.innerHTML = `<input type="radio" name="q${idx}" value="${safeVal}"> ${opt}`;
+      box.appendChild(lbl);
+    });
+
+    quiz.appendChild(box);
+  });
+
+  // submit button
+  const btn = document.createElement('button');
+  btn.className = 'submit';
+  btn.type = 'button';
+  btn.innerText = D.submit_btn;
+  btn.onclick = submitForm;
+  quiz.appendChild(btn);
+}
+
+/* ===== attach event listeners for language buttons AFTER defining setLang ===== */
+document.addEventListener('DOMContentLoaded', ()=> {
+  document.querySelectorAll('.lang-box button').forEach(b=>{
+    const l = b.getAttribute('data-lang');
+    b.dataset.lang = l; // ensure dataset present
+    b.addEventListener('click', ()=> {
+      // use global function
+      window.setLang(l);
+    });
+  });
+
+  // initial render
+  render();
+});
+
+/* ===== form submit handler (unchanged functionality) ===== */
+function submitForm(){
+  const D = dict[lang];
+  // check login
+  let currentUserStr = localStorage.getItem('current_user');
+  if(!currentUserStr){
+    alert(D && D.must_select ? (D.alerts?.login || 'Iltimos tizimga kiring') : 'Iltimos tizimga kiring');
+    location.href='kirish.html';
+    return;
+  }
+  let currentUser;
+  try{ currentUser = JSON.parse(currentUserStr); }catch(e){
+    alert(D && D.alerts ? (D.alerts.invalid || 'Tizimdagi ma’lumotlar noto‘g‘ri!') : 'Tizimdagi ma’lumotlar noto‘g‘ri!');
+    location.href='kirish.html';
+    return;
+  }
+
+  // collect answers
+  const answers = [];
+  const total = (dict[lang].q || dict.uz.q).length;
+  for(let i=0;i<total;i++){
+    const sel = document.querySelector(`input[name='q${i}']:checked`);
+    if(!sel){
+      alert((i+1) + (dict[lang].must_select ? dict[lang].must_select(i+1).replace(`${i+1}-`, '-') : '-savolni belgilang!'));
+      return;
+    }
+    answers.push(sel.value);
+  }
+
+  // save results (same format)
+  const results = JSON.parse(localStorage.getItem('results') || '[]');
+  results.push({
+    login: currentUser.login,
+    ism: currentUser.ism,
+    fam: currentUser.fam,
+    vil: currentUser.vil || '',
+    test: 'Sotsiologik',
+    answers: answers,
+    ts: new Date().toISOString()
+  });
+  localStorage.setItem('results', JSON.stringify(results));
+
+  alert(dict[lang].alerts?.saved || 'Test muvaffaqiyatli saqlandi!');
+  location.href = 'test.html';
+}
+</script>
+
+</body>
+</html>

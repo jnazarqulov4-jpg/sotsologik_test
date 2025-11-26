@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sotsologik_test</title>
+<style>
+:root{
+  --card:#0c1928;
+  --accent:#1e90ff;
+  --glow:#3ca0ff;
+}
+body{
+  font-family:'Inter','Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#08121b,#123047 60%);
+  animation:bgMove 14s ease-in-out infinite alternate;
+  color:#eaf2ff;
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+}
+@keyframes bgMove{
+  0%{background-position:0 0;} 
+  100%{background-position:100% 100%;}
+}
+.topbar{
+  position:fixed; left:0; top:0; right:0;
+  height:68px;
+  display:flex; align-items:center; gap:14px;
+  padding:10px 24px;
+  background:rgba(0,0,0,0.35);
+  backdrop-filter:blur(10px);
+  color:#fff;
+  font-weight:700;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  z-index:100;
+}
+.topbar img{
+  width:60px; height:60px;
+  object-fit:cover;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,0.5);
+  box-shadow:0 0 14px rgba(60,160,255,0.5);
+}
+.lang-float{
+  margin-left:auto;
+  display:flex;
+  gap:12px;
+}
+.lang-float button{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.25s;
+  backdrop-filter:blur(6px);
+}
+.lang-float button:hover{
+  background:rgba(255,255,255,0.22);
+  transform:translateY(-2px);
+}
+.wrap{width:100%; max-width:430px; margin-top:90px}
+.card{
+  background:rgba(8,18,30,0.7);
+  border-radius:20px;
+  padding:34px;
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 15px 40px rgba(0,0,0,0.6);
+  backdrop-filter:blur(14px);
+}
+.logo{
+  width:150px; height:150px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(255,255,255,0.4);
+  display:block; margin:0 auto 14px;
+  box-shadow:0 0 18px rgba(60,160,255,0.45);
+}
+h2{
+  margin:10px 0 20px;
+  text-align:center;
+  font-size:26px;
+  font-weight:700;
+  text-shadow:0 0 8px rgba(255,255,255,0.2);
+}
+label{display:block; font-size:14px; margin:8px 0 5px; color:#d7e6ff}
+input[type=text], input[type=password], select{
+  width:100%; padding:12px 14px;
+  border-radius:10px; border:none;
+  background:#eef4ff; color:#0b2236;
+  font-size:15px;
+  transition:0.25s;
+}
+input:focus, select:focus{
+  box-shadow:0 0 0 3px rgba(62,154,255,0.55);
+  transform:scale(1.02);
+}
+.row{display:block;}
+.row .half{width:100%; margin-bottom:12px;}
+.pwd-toggle{position:relative}
+.pwd-toggle button{
+  position:absolute; right:12px; top:8px;
+  background:transparent; border:none;
+  cursor:pointer; font-weight:700; color:#123;
+}
+.actions{margin-top:14px}
+button.primary{
+  width:100%; padding:14px;
+  border-radius:12px; border:none;
+  cursor:pointer; font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--glow));
+  color:#fff; font-size:16px;
+  transition:0.3s;
+  box-shadow:0 6px 18px rgba(30,144,255,0.45);
+}
+button.primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 26px rgba(30,144,255,0.6);
+}
+.muted{color:#bcd6ff; font-size:14px; text-align:center; margin-top:12px}
+.link{color:#d8eaff; text-decoration:underline; cursor:pointer}
+.small-row{display:flex; justify-content:space-between; align-items:center; margin-top:12px}
+.remember{display:flex; align-items:center; gap:8px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <img src="rasm/mho_logoo.jfif" alt="logo">
+  MUDOFAA VAZIRLIGI
+  <div class="lang-float">
+    <button onclick="setLang('uz')">UZ</button>
+    <button onclick="setLang('ru')">RU</button>
+    <button onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- LOGIN -->
+  <div class="card" id="loginBox">
+    <img class="logo" src="rasm/mho_logoo.jfif">
+    <h2 id="title">Kirish</h2>
+
+    <label id="lblLogin">Login</label>
+    <input type="text" id="loginUser">
+
+    <label id="lblPass">Parol</label>
+    <div class="pwd-toggle">
+      <input type="password" id="loginPass">
+      <button onclick="togglePwd('loginPass')">👁</button>
+    </div>
+
+    <div class="small-row">
+      <div class="remember">
+        <input type="checkbox" id="remember"> Eslab qol
+      </div>
+      <div class="link" onclick="showRegister()">Ro'yhatdan o'tish</div>
+    </div>
+
+    <div class="actions"><button class="primary" onclick="login()" id="btnLogin">Kirish</button></div>
+
+
+
+<button id="contactAdminBtn" style="
+  margin-top:10px;
+  padding:10px 15px;
+  background:#007bff;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+">Adminga murojaat</button>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div id="adminModal" style="
+  display:none;
+  position:fixed;left:0;top:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.6);
+  justify-content:center;align-items:center;z-index:9999;
+">
+  <div style="background:white;padding:20px;width:90%;max-width:400px;border-radius:10px;">
+    <h3>Adminga habar yuborish</h3>
+
+    <input id="userName" placeholder="Ismingiz" style="
+      width:100%;padding:10px;margin-top:10px;
+    ">
+
+    <textarea id="userMessage" placeholder="men sizga boglanishim uchun telefon raqamingizni qoldiring " style="
+      width:100%;height:120px;padding:10px;margin-top:10px;
+    "></textarea>
+     
+        <input id="usertel" placeholder=" Telefon nomer kiriting" style="
+      width:100%;padding:10px;margin-top:10px;
+    ">
+
+    <button id="sendToAdmin" style="
+      background:green;color:white;padding:10px;margin-top:10px;
+      width:100%;border:none;border-radius:6px;cursor:pointer;
+    ">Yuborish</button>
+
+    <button id="closeModal" style="
+      background:#777;color:white;padding:8px;margin-top:10px;
+      width:100%;border:none;border-radius:6px;cursor:pointer;
+    ">Bekor qilish</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+  <!-- REGISTER -->
+  <div class="card" id="registerBox" style="display:none;">
+    <img class="logo" src="rasm/mho_logoo.jfif">
+    <h2 id="regTitle">Ro'yhatdan o'tish</h2>
+
+    <label id="lblIsm">Ism</label>
+    <input type="text" id="regIsm">
+
+    <label id="lblFam">Familiya</label>
+    <input type="text" id="regFam">
+
+    <label id="lblVil">Viloyat</label>
+    <select id="regVil">
+      <option value="">-- Tanlang --</option>
+      <option>Samarqand</option>
+      <option>Navoiy</option>
+      <option>Jizzax</option>
+    </select>
+
+    <label id="lblNewLogin">Login</label>
+    <input type="text" id="regLogin">
+
+    <label id="lblNewPass">Parol</label>
+    <div class="pwd-toggle">
+      <input type="password" id="regPass">
+      <button onclick="togglePwd('regPass')">👁</button>
+    </div>
+
+    <div class="actions">
+      <button class="primary" onclick="register()">Ro'yhatdan o'tish</button>
+    </div>
+
+
+    <div style="text-align:center;margin-top:10px"><span class="link" onclick="showLogin()">Kirishga qaytish</span></div>
+  </div>
+
+
+
+
+
+</div>
+
+
+<script>
+// Til sozlamalari
+const T={uz:{title:"Kirish",lblLogin:"Login",lblPass:"Parol",btnLogin:"Kirish",helpText:"Agar siz admin bo'lsangiz admin panelga o'ting.",regTitle:"Ro'yhatdan o'tish",lblIsm:"Ism",lblFam:"Familiya",lblVil:"Viloyat",lblNewLogin:"Login",lblNewPass:"Parol"},ru:{title:"Вход",lblLogin:"Логин",lblPass:"Пароль",btnLogin:"Войти",helpText:"Если вы админ — вход через панель.",regTitle:"Регистрация",lblIsm:"Имя",lblFam:"Фамилия",lblVil:"Область",lblNewLogin:"Логин",lblNewPass:"Пароль"},en:{title:"Login",lblLogin:"Username",lblPass:"Password",btnLogin:"Login",helpText:"Admins use admin panel.",regTitle:"Register",lblIsm:"First name",lblFam:"Last name",lblVil:"Region",lblNewLogin:"Username",lblNewPass:"Password"}};
+
+function setLang(l){
+  const t=T[l];
+  document.getElementById("title").innerText=t.title;
+  document.getElementById("lblLogin").innerText=t.lblLogin;
+  document.getElementById("lblPass").innerText=t.lblPass;
+  document.getElementById("btnLogin").innerText=t.btnLogin;
+  document.getElementById("helpText").innerText=t.helpText;
+  document.getElementById("regTitle").innerText=t.regTitle;
+  document.getElementById("lblIsm").innerText=t.lblIsm;
+  document.getElementById("lblFam").innerText=t.lblFam;
+  document.getElementById("lblVil").innerText=t.lblVil;
+  document.getElementById("lblNewLogin").innerText=t.lblNewLogin;
+  document.getElementById("lblNewPass").innerText=t.lblNewPass;
+}
+
+// Ko‘rish paroli
+function togglePwd(id){
+  const el=document.getElementById(id);
+  el.type = el.type==="password" ? "text" : "password";
+}
+
+// Ko‘rsatish
+function showRegister(){loginBox.style.display="none";registerBox.style.display="block";}
+function showLogin(){registerBox.style.display="none";loginBox.style.display="block";}
+
+// Ro‘yxatdan o‘tish
+function register(){
+  const ism=regIsm.value.trim();
+  const fam=regFam.value.trim();
+  const vil=regVil.value;
+  const login=regLogin.value.trim();
+  const pass=regPass.value;
+
+  if(ism.length<4){alert("Ism kamida 4 harfdan iborat bo‘lishi kerak!"); return;}
+  if(fam.length<4){alert("Familiya kamida 4 harfdan iborat bo‘lishi kerak!"); return;}
+  if(login.length<6){alert("Login kamida 6 belgidan iborat bo‘lishi kerak!"); return;}
+  if(pass.length<8 || !(/[A-Za-z]/.test(pass)) || !(/[0-9]/.test(pass))){
+    alert("Parol kamida 8 belgidan iborat bo‘lishi, harf va raqamni o‘z ichiga olishi kerak!");
+    return;
+  }
+  if(!vil){alert("Viloyatni tanlang!"); return;}
+
+  if(localStorage.getItem("user_"+login)){alert("Bu login band!"); return;}
+
+  const all=JSON.parse(localStorage.getItem("all_users")||"[]");
+  const user={ism,fam,vil,login,pass,created:new Date().toLocaleString()};
+  localStorage.setItem("user_"+login,JSON.stringify(user));
+  all.push(user);
+  localStorage.setItem("all_users",JSON.stringify(all));
+
+  // Admin uchun parolni ham yuborish
+  let adminRecords=JSON.parse(localStorage.getItem("admin_passwords")||"[]");
+  adminRecords.push({login,pass});
+  localStorage.setItem("admin_passwords",JSON.stringify(adminRecords));
+
+  alert("Ro'yhatdan o'tdingiz!");
+  localStorage.setItem("current_user",JSON.stringify(user));
+  window.location="test.html";
+}
+
+
+
+
+// Kirish
+function login(){
+  const login=loginUser.value.trim();
+  const pass=loginPass.value;
+  const remember=document.getElementById("remember").checked;
+
+  if(login==="MHO_HP" && pass==="xolmurod1"){
+    localStorage.setItem("current_user","ADMIN");
+    window.location="admin.html";
+    return;
+  }
+
+  const raw=localStorage.getItem("user_"+login);
+  if(!raw){alert("Foydalanuvchi topilmadi!");return;}
+  const user=JSON.parse(raw);
+  if(user.pass!==pass){alert("Parol noto‘g‘ri!");return;}
+
+  if(remember){localStorage.setItem("remember_"+login,pass);}else{localStorage.removeItem("remember_"+login);}
+  localStorage.setItem("current_user",JSON.stringify(user));
+  window.location="test.html";
+}
+
+// Avtomatik eslab qolish
+window.onload=function(){
+  const users=JSON.parse(localStorage.getItem("all_users")||"[]");
+  users.forEach(u=>{
+    const saved=localStorage.getItem("remember_"+u.login);
+    if(saved){document.getElementById("loginUser").value=u.login; document.getElementById("loginPass").value=saved;}
+  });
+}
+
+
+
+// F12 va boshqa DevTools larni bloklash
+document.onkeydown = function(e){
+  if(e.key === "F12"){
+    return false;
+  }
+  if(e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")){
+    return false;
+  }
+  if(e.ctrlKey && e.key === "U"){
+    return false;
+  }
+};
+
+// O'ng tugmani bloklash
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// DevTools ochilganini aniqlash (yanada kuchaytirilgan himoya)
+setInterval(() => {
+  const start = performance.now();
+  debugger;
+  const end = performance.now();
+  if(end - start > 100){
+    alert("Developer Tools taqiqlangan!");
+    location.reload();
+  }
+}, 500);
+
+
+
+
+// Qorayish effekti uchun overlay yaratamiz
+const blackOut = document.createElement("div");
+blackOut.style.position = "fixed";
+blackOut.style.left = 0;
+blackOut.style.top = 0;
+blackOut.style.right = 0;
+blackOut.style.bottom = 0;
+blackOut.style.background = "black";
+blackOut.style.opacity = "0";
+blackOut.style.transition = "opacity 0.7s ease";
+blackOut.style.pointerEvents = "none";
+blackOut.style.zIndex = "9999";
+document.body.appendChild(blackOut);
+
+// TOPBARDAGI LOGO bosilganda ekran qorayib refresh bo‘ladi
+document.querySelector(".topbar img").onclick = () => {
+  blackOut.style.opacity = "1";
+
+  setTimeout(() => {
+    location.reload();
+  }, 1000); // 1 sekunddan keyin refresh
+};
+
+
+
+
+// Modal ochish
+document.getElementById("contactAdminBtn").onclick = () => {
+  document.getElementById("adminModal").style.display = "flex";
+};
+
+// Modal yopish
+document.getElementById("closeModal").onclick = () => {
+  document.getElementById("adminModal").style.display = "none";
+};
+
+// Habarning admin.html uchun saqlanishi
+document.getElementById("sendToAdmin").onclick = () => {
+  let name = document.getElementById("userName").value.trim();
+  let message = document.getElementById("userMessage").value.trim();
+
+  if (!name || !message) {
+    alert("Iltimos, barcha maydonlarni to'ldiring!");
+    return;
+  }
+
+  // Saqlanadigan malumot
+  let newMsg = {
+    name,
+    message,
+    time: new Date().toLocaleString(),
+    read: false,       // admin o‘qimagan
+    reply: ""          // admin javob yozmagan
+  };
+
+  // Oldingi xabarlarni olish
+  let all = JSON.parse(localStorage.getItem("adminMessages") || "[]");
+
+  // Yangi xabarni qo‘shish
+  all.push(newMsg);
+
+  // Saqlash
+  localStorage.setItem("adminMessages", JSON.stringify(all));
+
+  alert("Habaringiz adminga yuborildi!");
+
+  // Tozalash
+  document.getElementById("userName").value = "";
+  document.getElementById("userMessage").value = "";
+
+  // Yopish
+  document.getElementById("adminModal").style.display = "none";
+};
+
+
+</script>
+
+
+
+</body>
+</html>
